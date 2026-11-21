@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break-Even · Probevorlesung HS Pforzheim · Dr. Christian Neusser</title>
+<style>
+  :root{
+    --ink:#1C3A5E;        /* ein einziges Dunkelblau, wie Müller */
+    --ink-soft:#5B748F;
+    --meta:#9AA6B2;
+    --line:#D7DEE6;
+    --accent:#B47C2B;     /* warmer Akzent, extrem sparsam */
+    --accent-soft:#F3EAD9;
+    --bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Inter","Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+  }
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .screen{
+    position:absolute;inset:0;opacity:0;visibility:hidden;
+    transition:opacity .5s ease;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:7vh 9vw 11vh;
+  }
+  .screen.active{opacity:1;visibility:visible}
+  .kicker{font-size:1.05rem;letter-spacing:.18em;text-transform:uppercase;color:var(--meta);font-weight:600;margin-bottom:2.4vh}
+  h1{font-size:4.6rem;font-weight:800;line-height:1.08;letter-spacing:-.01em;max-width:18ch}
+  h2{font-size:3.4rem;font-weight:800;line-height:1.1;letter-spacing:-.01em;max-width:20ch}
+  .sub{font-size:1.7rem;font-weight:400;color:var(--ink);opacity:.82;margin-top:3vh;max-width:30ch;line-height:1.4}
+  .big{font-size:6.4rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .accent{color:var(--accent)}
+  .muted{color:var(--meta)}
+  /* Fußzeile wie Müller */
+  .foot{position:fixed;left:9vw;right:9vw;bottom:4.2vh;display:flex;justify-content:space-between;
+    font-size:.95rem;color:var(--meta);border-top:1px solid var(--line);padding-top:1.4vh}
+  /* Navigation */
+  .nav{position:fixed;bottom:4vh;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:30}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line);cursor:pointer;transition:.3s}
+  .dot.on{background:var(--ink);transform:scale(1.25)}
+  .arrow{position:fixed;top:50%;transform:translateY(-50%);border:none;background:none;color:var(--line);
+    font-size:2.4rem;cursor:pointer;padding:1rem;z-index:30;transition:.2s}
+  .arrow:hover{color:var(--ink)}
+  #prev{left:1.2vw}#next{right:1.2vw}
+  /* Vote */
+  .voterow{display:flex;gap:2.2rem;margin-top:5vh}
+  .vote{flex:1;max-width:22rem;border:2px solid var(--line);border-radius:14px;padding:2.4rem 2rem;cursor:pointer;
+    transition:.25s;background:#fff}
+  .vote:hover{border-color:var(--ink)}
+  .vote .lbl{font-size:1.6rem;font-weight:700}
+  .vote .cnt{font-size:3.2rem;font-weight:800;margin-top:.6rem}
+  .vote .bar{height:8px;border-radius:4px;background:var(--line);margin-top:1rem;overflow:hidden}
+  .vote .bar span{display:block;height:100%;width:0;background:var(--ink);transition:width .5s}
+  .hint{margin-top:3.5vh;font-size:1.15rem;color:var(--meta)}
+  .mini{font-size:1rem;color:var(--meta);margin-top:1.5vh}
+  /* interactive chart */
+  .lab{display:flex;gap:4vw;margin-top:3vh;flex-wrap:wrap;align-items:flex-start}
+  .chartwrap{flex:1 1 44rem;min-width:30rem}
+  .panel{flex:0 0 20rem}
+  .readout{font-size:1.25rem;line-height:2.1;color:var(--ink)}
+  .readout b{font-weight:800}
+  .kpi{font-size:3.6rem;font-weight:800;line-height:1;margin:.3rem 0 2.4rem}
+  .ctrl{margin:1.8vh 0}
+  .ctrl label{display:flex;justify-content:space-between;font-size:1.05rem;color:var(--ink-soft);margin-bottom:.5rem;font-weight:600}
+  input[type=range]{width:100%;accent-color:var(--ink);height:4px}
+  svg{width:100%;height:auto;display:block}
+  .axislab{font-size:13px;fill:var(--meta)}
+  /* exercise */
+  .calc{font-size:1.9rem;line-height:2.1;margin-top:3vh}
+  .calc .res{font-size:3rem;font-weight:800;margin-top:1.5vh}
+  .reveal{opacity:0;transition:opacity .5s;max-width:34ch}
+  .reveal.show{opacity:1}
+  .btn{display:inline-block;border:2px solid var(--ink);color:var(--ink);background:#fff;border-radius:10px;
+    padding:1rem 1.6rem;font-size:1.15rem;font-weight:700;cursor:pointer;margin:.6rem .8rem .6rem 0;transition:.2s}
+  .btn:hover{background:var(--ink);color:#fff}
+  .btn.done{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  /* KI quote */
+  .quote{border-left:4px solid var(--line);padding:1.2rem 0 1.2rem 2rem;font-size:1.5rem;line-height:1.5;
+    color:var(--ink);opacity:.9;max-width:34ch;margin-top:3vh;font-style:italic}
+  @media (max-width:900px){h1{font-size:2.8rem}h2{font-size:2.2rem}.big{font-size:3.6rem}.screen{padding:6vh 7vw 12vh}}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- 1 TITEL -->
+  <section class="screen active" data-foot="Titel">
+    <div class="kicker">Probevorlesung · Hochschule Pforzheim</div>
+    <h1>Die eine Zahl, die über Aufträge entscheidet.</h1>
+    <div class="sub">Break-Even-Analyse am Beispiel eines flexiblen Leitungselements (Witzenmann, Pforzheim). Beispielzahlen, illustrativ.</div>
+  </section>
+
+  <!-- 2 HOOK -->
+  <section class="screen" data-foot="Entscheidung">
+    <div class="kicker">Eine echte Entscheidung</div>
+    <h2>Ein Großkunde will 3.000 Elemente. Aber nur zu <span class="accent">45 €</span> statt 60 €.</h2>
+    <div class="voterow">
+      <div class="vote" onclick="vote(0)"><div class="lbl">Annehmen</div><div class="cnt" id="c0">0</div><div class="bar"><span id="b0"></span></div></div>
+      <div class="vote" onclick="vote(1)"><div class="lbl">Ablehnen</div><div class="cnt" id="c1">0</div><div class="bar"><span id="b1"></span></div></div>
+    </div>
+    <div class="hint">Karte heben oder hier tippen. Wir lösen es gleich auf.</div>
+    <div class="mini">Optional als Live-Quiz: Mentimeter- oder Particify-QR hier einblenden.</div>
+  </section>
+
+  <!-- 3 DAS BILD -->
+  <section class="screen" data-foot="Die Rechnung">
+    <div class="kicker">Deckungsbeitrag und Break-Even</div>
+    <h2 style="font-size:2.6rem;max-width:26ch">Schieben Sie am Preis. Sehen Sie, wie der Punkt wandert.</h2>
+    <div class="lab">
+      <div class="chartwrap">
+        <svg id="chart" viewBox="0 0 560 320" preserveAspectRatio="xMidYMid meet" aria-label="Break-Even-Grafik"></svg>
+      </div>
+      <div class="panel">
+        <div class="readout muted">Break-Even</div>
+        <div class="kpi"><span id="beOut">10.000</span> <span style="font-size:1.6rem;font-weight:600">Stück</span></div>
+        <div class="ctrl">
+          <label>Preis je Stück <b><span id="pOut">60</span> €</b></label>
+          <input id="price" type="range" min="40" max="80" value="60" step="1">
+        </div>
+        <div class="ctrl">
+          <label>Fixkosten <b><span id="fOut">240.000</span> €</b></label>
+          <input id="fix" type="range" min="120000" max="360000" value="240000" step="6000">
+        </div>
+        <div class="readout" style="font-size:1.05rem;margin-top:1.2vh">Variable Kosten fest 36 €. Deckungsbeitrag <b><span id="dbOut">24</span> €</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 DIE ÜBUNG -->
+  <section class="screen" data-foot="Der Zusatzauftrag">
+    <div class="kicker">Jetzt rechnen Sie</div>
+    <h2 style="font-size:2.6rem;max-width:24ch">Lohnt der Auftrag zu <span id="soPrice2">45</span> € wirklich nicht?</h2>
+    <div class="ctrl" style="max-width:34rem;margin-top:3vh">
+      <label>Preis des Sonderauftrags <b><span id="soOut">45</span> €</b></label>
+      <input id="so" type="range" min="30" max="60" value="45" step="1">
+    </div>
+    <div class="calc">
+      <span id="soPrice3">45</span> € minus 36 € variable Kosten = <b><span id="soDb">9</span> €</b> je Stück
+      <div class="res">mal 3.000 = <span id="soTot" class="accent">+27.000 €</span> Deckungsbeitrag</div>
+    </div>
+    <div id="soVerdict" class="reveal show" style="font-size:1.4rem;margin-top:3vh;max-width:40ch">
+      Solange der Preis über 36 € liegt und die Kapazität frei ist, lohnt der Auftrag. Das Vollkosten-Bauchgefühl hat getäuscht.
+    </div>
+  </section>
+
+  <!-- 5 KI PRÜFEN -->
+  <section class="screen" data-foot="KI prüfen">
+    <div class="kicker">KI prüfen statt KI glauben</div>
+    <h2 style="font-size:2.6rem;max-width:22ch">Die KI rät ab. Überzeugend. Aber stimmt es?</h2>
+    <div class="quote">„Bei 45 € deckt der Auftrag nicht die Vollkosten von 60 €. Pro Stück 15 € Verlust, rund 45.000 € Schaden. Nicht annehmen.“</div>
+    <div style="margin-top:3.5vh">
+      <span class="btn" onclick="kiReveal(this)">Nachvollziehbar?</span>
+      <span class="btn" onclick="kiReveal(this)">Reproduzierbar?</span>
+      <span class="btn" onclick="kiReveal(this)">Wer verantwortet es?</span>
+    </div>
+    <div id="kiAnswer" class="reveal" style="font-size:1.5rem;margin-top:3.5vh;max-width:40ch">
+      Der Fehler: Die KI rechnet anteilige Fixkosten in eine kurzfristige Entscheidung ein. Entscheidend sind nur die <span class="accent">36 € variable Kosten</span>.
+    </div>
+  </section>
+
+  <!-- 6 SCHLUSS -->
+  <section class="screen" data-foot="Fazit">
+    <h1 style="font-size:3.8rem;max-width:24ch">Der Break-Even sagt nicht, ob eine Entscheidung richtig ist.</h1>
+    <div class="sub" style="font-size:2rem;max-width:34ch;opacity:1">Er sagt, ab welcher Annahme sie kippt. Und wer dafür geradesteht.</div>
+    <div class="mini" style="margin-top:5vh;font-size:1.2rem">Vielen Dank. Ich freue mich auf Ihre Fragen.</div>
+  </section>
+
+</div>
+
+<button class="arrow" id="prev" onclick="go(-1)" aria-label="zurück">&#8249;</button>
+<button class="arrow" id="next" onclick="go(1)" aria-label="weiter">&#8250;</button>
+<div class="nav" id="dots"></div>
+<div class="foot"><span id="footL">Dr. Christian Neusser · Hochschule Pforzheim · 7. Dezember 2026</span><span id="footR">1 / 6</span></div>
+
+<script>
+  const screens=[...document.querySelectorAll('.screen')];
+  let i=0;
+  const dots=document.getElementById('dots');
+  screens.forEach((_,k)=>{const d=document.createElement('div');d.className='dot'+(k===0?' on':'');d.onclick=()=>show(k);dots.appendChild(d);});
+  function show(n){
+    i=Math.max(0,Math.min(screens.length-1,n));
+    screens.forEach((s,k)=>s.classList.toggle('active',k===i));
+    [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i));
+    document.getElementById('footR').textContent=(i+1)+' / '+screens.length;
+    document.getElementById('prev').style.visibility=i===0?'hidden':'visible';
+    document.getElementById('next').style.visibility=i===screens.length-1?'hidden':'visible';
+  }
+  function go(d){show(i+d)}
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1)}
+  });
+  // Vote
+  const votes=[0,0];
+  function vote(n){votes[n]++;const t=votes[0]+votes[1]||1;
+    for(let k=0;k<2;k++){document.getElementById('c'+k).textContent=votes[k];
+      document.getElementById('b'+k).style.width=Math.round(votes[k]/t*100)+'%';}}
+  // Break-even chart
+  const P=document.getElementById('price'),F=document.getElementById('fix'),chart=document.getElementById('chart');
+  function fmt(n){return n.toLocaleString('de-DE')}
+  function draw(){
+    const price=+P.value, fix=+F.value, vc=36, db=price-vc;
+    const be=db>0?fix/db:0;
+    document.getElementById('pOut').textContent=price;
+    document.getElementById('fOut').textContent=fmt(fix);
+    document.getElementById('dbOut').textContent=db;
+    document.getElementById('beOut').textContent=db>0?fmt(Math.round(be)):'—';
+    // plot area
+    const L=60,R=540,T=20,B=270, qmaxX=20000, qmaxY=1400000;
+    const sx=q=>L+(q/qmaxX)*(R-L), sy=v=>B-(v/qmaxY)*(B-T);
+    let s='';
+    // axes
+    s+=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#C9D3DD"/>`;
+    s+=`<line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#C9D3DD"/>`;
+    s+=`<text class="axislab" x="${L-6}" y="${T+2}" text-anchor="end">€</text>`;
+    s+=`<text class="axislab" x="${R}" y="${B+18}" text-anchor="end">Menge</text>`;
+    // cost line: fix + vc*q
+    s+=`<line x1="${sx(0)}" y1="${sy(fix)}" x2="${sx(qmaxX)}" y2="${sy(fix+vc*qmaxX)}" stroke="#A9B6C4" stroke-width="3"/>`;
+    s+=`<text class="axislab" x="${sx(qmaxX)-4}" y="${sy(fix+vc*qmaxX)-8}" text-anchor="end" fill="#8A97A6">Gesamtkosten</text>`;
+    // revenue line: price*q
+    s+=`<line x1="${sx(0)}" y1="${sy(0)}" x2="${sx(qmaxX)}" y2="${sy(price*qmaxX)}" stroke="#1C3A5E" stroke-width="3"/>`;
+    s+=`<text class="axislab" x="${sx(qmaxX)-4}" y="${sy(price*qmaxX)+14}" text-anchor="end" fill="#1C3A5E">Erlös</text>`;
+    // break-even marker
+    if(db>0 && be<=qmaxX){const bx=sx(be),by=sy(price*be);
+      s+=`<line x1="${bx}" y1="${by}" x2="${bx}" y2="${B}" stroke="#B47C2B" stroke-dasharray="4 4"/>`;
+      s+=`<circle cx="${bx}" cy="${by}" r="6" fill="#B47C2B"/>`;
+      s+=`<text x="${bx}" y="${B+18}" text-anchor="middle" fill="#B47C2B" font-size="13" font-weight="700">${fmt(Math.round(be))}</text>`;
+    }
+    chart.innerHTML=s;
+  }
+  P.oninput=draw;F.oninput=draw;draw();
+  // Exercise
+  const SO=document.getElementById('so');
+  function soDraw(){const p=+SO.value,db=p-36,tot=db*3000;
+    ['soOut','soPrice2','soPrice3'].forEach(id=>document.getElementById(id).textContent=p);
+    document.getElementById('soDb').textContent=db;
+    const el=document.getElementById('soTot');
+    el.textContent=(tot>=0?'+':'')+fmt(tot)+' €';
+    el.className=tot>0?'accent':'muted';
+    document.getElementById('soVerdict').classList.toggle('show',true);
+  }
+  SO.oninput=soDraw;soDraw();
+  // KI
+  let kiCount=0;
+  function kiReveal(b){if(!b.classList.contains('done')){b.classList.add('done');kiCount++;}
+    if(kiCount>=1)document.getElementById('kiAnswer').classList.add('show');}
+  show(0);
+</script>
+</body>
+</html>

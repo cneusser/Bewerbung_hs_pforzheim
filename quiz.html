@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break-Even Selbsttest · Probevorlesung HS Pforzheim · Dr. Christian Neusser</title>
+<style>
+  :root{color-scheme:light;--navy:#1A3A5C;--teal:#0D7EA0;--gold:#E8A020;--light:#F4F7FA;--ink:#24303B;--ok:#1E7A52;--no:#B23A3A;--line:#DCE3EC}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--light);color:var(--ink);line-height:1.55}
+  .wrap{max-width:720px;margin:0 auto;padding:4vh 5vw 8vh}
+  header{text-align:center;margin-bottom:3vh}
+  .kick{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  h1{font-size:2rem;color:var(--navy);margin:.3rem 0 .4rem}
+  .sub{color:#5a6b7b;font-size:1rem}
+  .bar{height:7px;background:#e2e8f0;border-radius:4px;margin:2.4vh 0;overflow:hidden}
+  .bar span{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:2rem 1.8rem;box-shadow:0 2px 14px rgba(26,58,92,.06)}
+  .qno{font-size:.82rem;color:var(--teal);font-weight:700;letter-spacing:.08em}
+  .q{font-size:1.3rem;font-weight:700;color:var(--navy);margin:.3rem 0 1.3rem}
+  .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:10px;
+    padding:.95rem 1.1rem;font-size:1.02rem;color:var(--ink);cursor:pointer;margin-bottom:.7rem;transition:.15s}
+  .opt:hover{border-color:var(--teal)}
+  .opt.ok{border-color:var(--ok);background:#eaf6ef;color:var(--ok);font-weight:700}
+  .opt.no{border-color:var(--no);background:#fbeaea;color:var(--no)}
+  .opt:disabled{cursor:default}
+  .fb{margin-top:1rem;font-size:.98rem;color:#44525f;min-height:1.4rem}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.6rem}
+  .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:.8rem 1.6rem;font-size:1rem;font-weight:700;cursor:pointer}
+  .btn[disabled]{opacity:.4;cursor:default}
+  .score{font-size:3rem;font-weight:800;color:var(--gold)}
+  .result{text-align:center}
+  footer{text-align:center;color:#8494a3;font-size:.82rem;margin-top:4vh}
+  a{color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kick">Probevorlesung · Hochschule Pforzheim</div>
+    <h1>Break-Even Selbsttest</h1>
+    <div class="sub">Vier Fragen zur Sitzung. Sofort-Feedback, am Ende Ihr Ergebnis.</div>
+  </header>
+  <div class="bar"><span id="bar"></span></div>
+  <div class="card" id="card"></div>
+  <footer>Dr. Christian Neusser · Modul GMT2250 Grundlagen der Kosten- und Leistungsrechnung · Beispielzahlen, illustrativ</footer>
+</div>
+<script>
+  const Q=[
+    {q:"Die Fixkosten betragen 240.000 Euro, der Deckungsbeitrag 24 Euro je Stück. Wie hoch ist der Break-Even?",
+     o:["4.000 Stück","10.000 Stück","24.000 Stück","240.000 Stück"],c:1,
+     e:"Break-Even = Fixkosten geteilt durch Stück-Deckungsbeitrag = 240.000 / 24 = 10.000 Stück."},
+    {q:"Ein Sonderauftrag liegt unter dem regulären Preis. Welche Kosten sind kurzfristig entscheidungsrelevant?",
+     o:["Die anteiligen Fixkosten","Die Vollkosten","Die variablen Kosten","Die Gesamtkosten"],c:2,
+     e:"Entscheidungsrelevant sind die Kosten, die sich mit der Entscheidung ändern, also die variablen Kosten."},
+    {q:"Der Großkunde will 3.000 Stück zu 45 Euro, variable Kosten 36 Euro. Welcher zusätzliche Deckungsbeitrag entsteht?",
+     o:["minus 45.000 Euro","27.000 Euro","135.000 Euro","45.000 Euro"],c:1,
+     e:"(45 minus 36) mal 3.000 = 9 mal 3.000 = 27.000 Euro, solange Kapazität frei ist."},
+    {q:"Geplanter Absatz 14.000 Stück, Break-Even 10.000 Stück. Wie hoch ist der Sicherheitskoeffizient?",
+     o:["4.000","29 Prozent","40 Prozent","71 Prozent"],c:1,
+     e:"Sicherheitsstrecke = 14.000 minus 10.000 = 4.000; Koeffizient = 4.000 / 14.000 = rund 29 Prozent."}
+  ];
+  let i=0,score=0,answered=false;
+  const card=document.getElementById('card'),bar=document.getElementById('bar');
+  function render(){
+    answered=false; bar.style.width=(i/Q.length*100)+"%";
+    const it=Q[i];
+    card.innerHTML=`<div class="qno">Frage ${i+1} von ${Q.length}</div><div class="q">${it.q}</div>`+
+      it.o.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join("")+
+      `<div class="fb" id="fb"></div><div class="nav"><span></span><button class="btn" id="next" disabled>Weiter</button></div>`;
+    card.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+    document.getElementById('next').onclick=()=>{i++; i<Q.length?render():result();};
+  }
+  function pick(k){
+    if(answered)return; answered=true; const it=Q[i];
+    card.querySelectorAll('.opt').forEach((b,idx)=>{b.disabled=true; if(idx===it.c)b.classList.add('ok'); if(idx===k&&k!==it.c)b.classList.add('no');});
+    if(k===it.c)score++;
+    document.getElementById('fb').textContent=(k===it.c?"Richtig. ":"Nicht ganz. ")+it.e;
+    bar.style.width=((i+1)/Q.length*100)+"%";
+    document.getElementById('next').disabled=false;
+  }
+  function result(){
+    bar.style.width="100%";
+    const msg=score===4?"Volle Punktzahl, das sitzt.":score>=2?"Solide, der Kern stimmt.":"Noch einmal die Grafik anschauen, dann klappt es.";
+    card.innerHTML=`<div class="result"><div class="qno">Ergebnis</div><div class="score">${score} / 4</div><p style="margin:.6rem 0 1.4rem">${msg}</p>
+      <button class="btn" id="again">Noch einmal</button>
+      <p style="margin-top:1.4rem;font-size:.95rem">Zum Live-Schieberegler: <a href="breakeven.html">Break-Even selbst testen</a></p></div>`;
+    document.getElementById('again').onclick=()=>{i=0;score=0;render();};
+  }
+  render();
+</script>
+</body>
+</html>
