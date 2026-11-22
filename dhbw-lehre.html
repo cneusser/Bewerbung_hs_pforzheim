@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lehre an der DHBW Stuttgart &middot; ReFi und Unternehmensf&uuml;hrung &middot; Dr. Christian Neusser</title>
+<style>
+  :root{
+    --navy:#1A3A5C; --navy2:#0f5070; --teal:#0D7EA0; --gold:#E8A020;
+    --light:#F4F7FA; --ink:#2C2C2C; --line:#DCE3EC; --muted:#5a6b7b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);line-height:1.7;background:#fff}
+  a{color:var(--teal);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .top{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,var(--teal) 100%);color:#fff;padding:5.5rem 2rem 3.8rem;text-align:center}
+  .top .mark{color:var(--gold);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+  .top h1{font-size:2.2rem;margin:.6rem 0 .5rem}
+  .top .sub{opacity:.9;max-width:720px;margin:0 auto}
+  .back{display:inline-block;margin-top:1.5rem;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:.5rem 1.1rem;font-size:.9rem}
+  .back:hover{background:rgba(255,255,255,.12);text-decoration:none}
+
+  main{max-width:1020px;margin:0 auto;padding:4rem 2rem 2rem}
+  h2{color:var(--navy);font-size:1.55rem;border-bottom:3px solid var(--teal);display:inline-block;padding-bottom:.3rem;margin:3.5rem 0 1.4rem}
+  h3{color:var(--navy);font-size:1.15rem;margin:1.6rem 0 .6rem}
+  p{margin-bottom:1rem;color:#3c4854}
+  .lead{font-size:1.08rem;color:var(--muted)}
+  strong{color:var(--navy)}
+
+  .modulebar{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0 1.4rem}
+  .chip{background:var(--light);border:1px solid var(--line);border-radius:18px;padding:.28rem .85rem;font-size:.8rem;color:#45525f}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin:1.2rem 0}
+  .panel{background:var(--light);border:1px solid var(--line);border-radius:12px;padding:1.4rem 1.5rem}
+  .panel h4{color:var(--navy);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.7rem}
+  .panel ul{margin:0 0 0 1.05rem;font-size:.93rem;color:#45525f}
+  .panel li{margin-bottom:.4rem}
+
+  table.toc{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.93rem}
+  table.toc td{padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+  table.toc tr td:first-child{width:38px;color:var(--teal);font-weight:700}
+  table.toc .cap{background:var(--navy);color:#fff;font-weight:700;letter-spacing:.04em}
+  table.toc .cap td{color:#fff}
+
+  .highlight{border-left:4px solid var(--gold);background:#fffaf0;border-radius:0 10px 10px 0;padding:1.2rem 1.4rem;margin:1.4rem 0}
+  .highlight h4{color:var(--navy);margin-bottom:.4rem}
+
+  .matcards{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin:1.4rem 0}
+  .mat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.5rem;box-shadow:0 2px 12px rgba(26,58,92,.05);display:flex;flex-direction:column}
+  .mat .tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  .mat h4{color:var(--navy);font-size:1.1rem;margin:.3rem 0 .5rem}
+  .mat p{font-size:.9rem;color:#50606d;margin-bottom:1rem}
+  .mat a.open{margin-top:auto;align-self:flex-start;background:var(--navy);color:#fff;border-radius:8px;padding:.55rem 1.2rem;font-weight:700;font-size:.88rem}
+  .mat a.open:hover{background:var(--teal);text-decoration:none}
+
+  .embed{width:100%;height:560px;border:1px solid var(--line);border-radius:10px;margin:.6rem 0 .4rem;background:var(--light)}
+  .embed-note{font-size:.85rem;color:var(--muted)}
+
+  .bridge{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;border-radius:14px;padding:2rem;text-align:center;margin:3rem 0 1rem}
+  .bridge h3{color:#fff;margin:0 0 .5rem}
+  .bridge p{color:#dbe6f0;max-width:620px;margin:0 auto 1.2rem}
+  .bridge a{display:inline-block;background:var(--gold);color:var(--navy);border-radius:8px;padding:.7rem 1.6rem;font-weight:700}
+  .bridge a:hover{text-decoration:none;opacity:.9}
+
+  footer{background:var(--navy);color:#9fb3c6;text-align:center;padding:2rem;font-size:.84rem;margin-top:2rem}
+  @media(max-width:720px){.split,.matcards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="mark">Dr. Christian Neusser &middot; Lehrportfolio</div>
+  <h1>Lehre an der DHBW Stuttgart</h1>
+  <p class="sub">Ausz&uuml;ge aus zwei laufenden Vorlesungen im Studiengang Wirtschaftsingenieurwesen: Rechnungswesen und Finanzierung (ReFi) und Grundlagen der Unternehmensf&uuml;hrung.</p>
+  <a class="back" href="index.html">&larr; Zur &Uuml;bersicht</a>
+</div>
+
+<main>
+
+  <p class="lead">Die Pforzheimer Probevorlesung zur Break-Even-Analyse entsteht nicht auf der gr&uuml;nen Wiese. Sie ist der zugespitzte Ausschnitt aus einem Baustein, den ich an der DHBW Stuttgart seit Jahren unterrichte. Diese Seite zeigt den Rahmen: zwei Module, ihre Inhalte und je einen kuratierten Original-Auszug als PDF &ndash; damit Sie sehen k&ouml;nnen, mit welcher Tiefe und Didaktik ich lehre.</p>
+
+  <!-- ================= REFI ================= -->
+  <h2>Modul 1 &middot; Rechnungswesen und Finanzierung (ReFi)</h2>
+  <div class="modulebar">
+    <span class="chip">DHBW Stuttgart &middot; Wirtschaftsingenieurwesen</span>
+    <span class="chip">2. Studienjahr</span>
+    <span class="chip">5 ECTS &middot; Klausur 120 Min</span>
+    <span class="chip">Vorlesung, &Uuml;bung, Gruppenarbeit</span>
+  </div>
+
+  <p>Das Modul f&uuml;hrt vom externen zum internen Rechnungswesen und weiter zur Finanzierung. Es ist genau das Fach, das die ausgeschriebene Denomination &bdquo;Rechnungswesen/Controlling&ldquo; an der Hochschule Pforzheim im Kern trifft. In <strong>ReFi&nbsp;I</strong> steht nach den Grundlagen der Finanzbuchhaltung, Bilanz und GuV der Sprung in die Kosten- und Leistungsrechnung &ndash; und dort liegt die Break-Even-Analyse.</p>
+
+  <div class="split">
+    <div class="panel">
+      <h4>ReFi I &middot; Externes Rechnungswesen</h4>
+      <ul>
+        <li>Aufgaben und Gliederung des betrieblichen Rechnungswesens</li>
+        <li>Inventur, Inventar, Bilanzaufbau</li>
+        <li>Buchen auf Bestands- und Erfolgskonten, GuV</li>
+        <li>Jahresabschluss: Bilanz, GuV, Anhang, Lagebericht</li>
+        <li>Bilanzanalyse und Grundlagen der internationalen Rechnungslegung</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>ReFi I &middot; Kapitel 4: Interne Kosten- und Leistungsrechnung</h4>
+      <ul>
+        <li>Kostenbegriffe, -verl&auml;ufe, Sunk Costs und Opportunit&auml;tskosten</li>
+        <li>Kostenarten-, Kostenstellen- und Kostentr&auml;gerrechnung (BAB)</li>
+        <li>Divisions-, &Auml;quivalenzziffern-, Zuschlagskalkulation, Maschinenstundensatz</li>
+        <li>Voll- versus Teilkostenrechnung, Deckungsbeitragsrechnung</li>
+        <li><strong>Break-even-Analyse, Engpass und Make-or-Buy</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Der Kapitel-4-Baustein im Detail</h3>
+  <p>Der folgende Auszug ist die vollst&auml;ndige Lehreinheit &bdquo;Internes Rechnungswesen, Teil A&ldquo; aus ReFi&nbsp;I (Stand WS 2026). Sie f&uuml;hrt vom Kostenbegriff bis zur unternehmerischen Entscheidung und enth&auml;lt alle durchgerechneten F&auml;lle, die auch der Probevorlesung zugrunde liegen.</p>
+
+  <table class="toc">
+    <tr class="cap"><td>4.1</td><td>Grundbegriffe und Systematik &ndash; Einzel-/Gemeinkosten, fixe/variable Kosten, Sunk Costs, das Grundschema der Kostenrechnung</td></tr>
+    <tr><td>4.2</td><td>Kostenarten, -stellen, -tr&auml;ger &ndash; Betriebsabrechnungsbogen, Kalkulationsverfahren, Maschinenstundensatz (mit &Uuml;bungen BAB und &Auml;quivalenzziffern)</td></tr>
+    <tr><td>4.3</td><td>Erfolgsrechnungen &ndash; &bdquo;Richtig gerechnet, falsch entschieden&ldquo;: Vollkosten- gegen Teilkostenrechnung, ein- und mehrstufige Deckungsbeitragsrechnung</td></tr>
+    <tr class="cap"><td>&#9733;</td><td>Break-even-Analyse &ndash; Gewinnschwelle, Break-even-Zeitpunkt, &Uuml;bungen &bdquo;Salbenmaschine&ldquo; und &bdquo;Programmplanung bei der Schwarz AG&ldquo; mit Engpass und relativem Deckungsbeitrag</td></tr>
+    <tr><td>&rarr;</td><td>Make-or-Buy &ndash; Preisobergrenzen, drei reale F&auml;lle, Exit-Ticket und Quellen (Coenenberg, Macha, Riebel)</td></tr>
+  </table>
+
+  <div class="highlight">
+    <h4>Von der Vorlesung zur Probevorlesung</h4>
+    <p style="margin-bottom:0">F&uuml;r die 15-min&uuml;tige Pforzheimer Probevorlesung habe ich aus diesem Baustein die Break-even-Analyse herausgegriffen, an einem regionalen Fall (Witzenmann, Pforzheim) neu gerahmt und um einen Live-Schieberegler, eine Festigung im Kahoot-Format und einen KI-Check erg&auml;nzt. Derselbe Kern, didaktisch auf einen Aha-Moment zugespitzt.</p>
+  </div>
+
+  <div class="matcards">
+    <div class="mat">
+      <div class="tag">Foliensatz &middot; 56 Seiten</div>
+      <h4>ReFi I &middot; Interne KLR und Break-even (PDF)</h4>
+      <p>Die komplette Lehreinheit im DHBW-Design: Herleitungen, Grafiken, durchgerechnete &Uuml;bungen mit Musterl&ouml;sungen, Exit-Ticket und Literaturapparat.</p>
+      <a class="open" href="261122_DHBW_ReFi_KLR_BreakEven.pdf" target="_blank" rel="noopener">In neuem Tab &ouml;ffnen</a>
+    </div>
+    <div class="mat">
+      <div class="tag">Zum Mitrechnen</div>
+      <h4>Break-even live testen</h4>
+      <p>Der interaktive Schieberegler aus der Probevorlesung: Preis und Fixkosten verschieben, die Gewinnschwelle wandert in Echtzeit mit.</p>
+      <a class="open" href="breakeven.html" target="_blank" rel="noopener">Lernwerkzeug &ouml;ffnen</a>
+    </div>
+  </div>
+
+  <p class="embed-note">Direkt auf der Seite bl&auml;ttern:</p>
+  <iframe class="embed" src="261122_DHBW_ReFi_KLR_BreakEven.pdf#view=FitH" title="ReFi I KLR und Break-even"></iframe>
+  <p class="embed-note">Falls die Vorschau in Ihrem Browser nicht erscheint, &ouml;ffnen Sie den Foliensatz &uuml;ber die Karte oben.</p>
+
+  <!-- ================= UNTERNEHMENSFÜHRUNG ================= -->
+  <h2>Modul 2 &middot; Grundlagen der Unternehmensf&uuml;hrung</h2>
+  <div class="modulebar">
+    <span class="chip">DHBW Stuttgart &middot; Wirtschaftsingenieurwesen</span>
+    <span class="chip">Kurs TWIW23IP &middot; 2026</span>
+    <span class="chip">eigene Vorlesung</span>
+    <span class="chip">nach Dillerup/Stoi</span>
+  </div>
+
+  <p>Die zweite Vorlesung zeigt die Breite jenseits des Rechnungswesens: <strong>Grundlagen der Unternehmens- und Personalf&uuml;hrung</strong>. Sie verbindet Managementlehre mit einem soliden theoretischen Fundament und schl&auml;gt die Br&uuml;cke zu meinem Forschungsfeld &ndash; Transaktionskosten, Principal-Agent und ressourcenorientierte Strategie geh&ouml;ren zum Kern des MSTM-Frameworks meiner Dissertation.</p>
+
+  <table class="toc">
+    <tr class="cap"><td>1.1</td><td>Grundbegriffe &ndash; Unternehmen, F&uuml;hrung, Management und Leadership, German Mittelstand und Hidden Champions, Weltmarktf&uuml;hrer</td></tr>
+    <tr class="cap"><td>1.2</td><td>Theorien der Unternehmensf&uuml;hrung &ndash; Industrie&ouml;konomik (SCP), ressourcenorientierter Ansatz (RBV), Neue Institutionen&ouml;konomie: Property Rights, Transaktionskosten, Principal-Agent</td></tr>
+    <tr><td>1.3</td><td>System der Unternehmensf&uuml;hrung &ndash; Steuerung, Regelung und Lenkung, R&uuml;ckkopplung, Komplexit&auml;t</td></tr>
+    <tr><td>2</td><td>Normative Unternehmensf&uuml;hrung &ndash; Werte, Ethik, Nachhaltigkeit, Corporate Governance</td></tr>
+    <tr><td>3</td><td>Strategische Unternehmensf&uuml;hrung &ndash; Umwelt- und Unternehmensanalyse, Strategieentwicklung</td></tr>
+  </table>
+
+  <div class="highlight">
+    <h4>Warum dieser Auszug</h4>
+    <p style="margin-bottom:0">Der PDF-Auszug umfasst die Kapitel&nbsp;1.1 und 1.2 &ndash; das begriffliche und theoretische Fundament. Er zeigt, dass ich betriebswirtschaftliche Praxis nicht nur anwende, sondern theoretisch einordne: von der Definition von F&uuml;hrung &uuml;ber Hidden Champions bis zu Transaktionskosten- und Agenturtheorie, derselben Theoriefamilie, auf der auch mein Forschungsmodell aufbaut.</p>
+  </div>
+
+  <div class="matcards">
+    <div class="mat">
+      <div class="tag">Foliensatz &middot; Auszug Kap. 1</div>
+      <h4>Unternehmensf&uuml;hrung &middot; Grundlagen und Theorien (PDF)</h4>
+      <p>Grundbegriffe, Management versus Leadership, Mittelstand und Hidden Champions sowie die drei Theorieschulen der Unternehmensf&uuml;hrung mit Grafiken und Beispielen.</p>
+      <a class="open" href="261122_DHBW_Unternehmensfuehrung_Grundlagen.pdf" target="_blank" rel="noopener">In neuem Tab &ouml;ffnen</a>
+    </div>
+    <div class="mat">
+      <div class="tag">Forschungsbr&uuml;cke</div>
+      <h4>Anschluss an meine Forschung</h4>
+      <p>Transaktionskosten und Principal-Agent sind der theoretische Unterbau meines MSTM-Frameworks. Lehre und Forschung greifen hier unmittelbar ineinander.</p>
+      <a class="open" href="bewerbung.html#forschung">Zur Forschungsagenda</a>
+    </div>
+  </div>
+
+  <p class="embed-note">Direkt auf der Seite bl&auml;ttern:</p>
+  <iframe class="embed" src="261122_DHBW_Unternehmensfuehrung_Grundlagen.pdf#view=FitH" title="Unternehmensf&uuml;hrung Grundlagen und Theorien"></iframe>
+  <p class="embed-note">Falls die Vorschau in Ihrem Browser nicht erscheint, &ouml;ffnen Sie den Foliensatz &uuml;ber die Karte oben.</p>
+
+  <!-- Bridge -->
+  <div class="bridge">
+    <h3>Und so sieht die Zuspitzung aus</h3>
+    <p>Die Probevorlesung an der Hochschule Pforzheim: derselbe KLR-Kern aus ReFi&nbsp;I, zugespitzt auf einen regionalen Fall, eine Entscheidung und einen Aha-Moment.</p>
+    <a href="probevorlesung.html">Zur Probevorlesung &rarr;</a>
+  </div>
+
+</main>
+
+<footer>
+  Lehrportfolio &middot; DHBW Stuttgart &middot; Rechnungswesen und Finanzierung sowie Unternehmensf&uuml;hrung &middot; Dr. Christian Neusser &middot; Lehrmaterialien zu Ansichtszwecken
+</footer>
+
+</body>
+</html>
